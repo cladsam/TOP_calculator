@@ -8,7 +8,8 @@ const operators = {
     sign: "+/-",
 }
 const formatERROR = "formatERROR"
-
+const numberKeys = Array.from({ length: 10 }, (_, i) => String(i));
+const operatorKeys = Object.values(operators);
 
 let numberA = 0;
 let numberB = null;
@@ -30,16 +31,16 @@ const btnClear = document.querySelector("#clear");
 
 for (button of btnNumbers) {
 
-    button.addEventListener("click", (e) => { pressNumber(e) })
+    button.addEventListener("click", (e) => { pressNumber(e.target.textContent) })
 }
 for (button of btnOperators) {
-    button.addEventListener("click", (e) => { pressOperator(e) })
+    button.addEventListener("click", (e) => { pressOperator(e.target.textContent) })
 }
 
-function pressOperator(e) {
-    console.log(e.target.textContent);
-    let choosedOperator;
-    choosedOperator = e.target.textContent;
+function pressOperator(choosedOperator) {
+    // console.log(e.target.textContent);
+    // let choosedOperator;
+    // choosedOperator = e.target.textContent;
     // on saisit un opérateur après 1 nombre
     if (operator === null) {
         operator = choosedOperator;
@@ -51,7 +52,7 @@ function pressOperator(e) {
     else {
         if (choosedOperator === operators.equal) {
             if (numberB) {
-                let result = operate(numberA, numberB, operator);
+                let result = operate(Number(numberA), Number(numberB), operator);
                 updateDisplay(result);
             }
         }
@@ -59,6 +60,13 @@ function pressOperator(e) {
             console.log("Let see that one a bit later")
         }
         else {
+            if (numberA && numberB && operator) {
+                let result = operate(Number(numberA), Number(numberB), operator);
+                numberA = result;
+                updateDisplay(numberA);
+                numberB = null;
+                operator = choosedOperator;
+            }
 
         }
     }
@@ -68,7 +76,7 @@ btnClear.addEventListener("click", (e) => { initAll(e) })
 
 
 function initAll(e) {
-    numberA = 0;
+    numberA = "0";
     displayText = numberA;
     numberB = null;
     operator = null;
@@ -77,16 +85,16 @@ function initAll(e) {
 }
 
 
-function pressNumber(e) {
+function pressNumber(numberText) {
     if (operator && numberB === null) {
-        displayText = e.target.textContent;
+        displayText = numberText;
         numberB = displayText;
     }
     else if (displayText === "0") {
-        displayText = e.target.textContent
+        displayText = numberText;
     }
     else {
-        displayText += e.target.textContent;
+        displayText += numberText;
         if (numberB) {
             numberB = displayText;
         }
@@ -144,7 +152,24 @@ function operate(a, b, operator) {
             break;
     }
     return result;
+};
+
+document.addEventListener("keydown", e => { getKeyBoardInput(e) });
+
+function getKeyBoardInput(e) {
+    let selectedKey = e.key;
+    if (numberKeys.includes(selectedKey)) {
+        pressNumber(selectedKey)
+    }
+    else if (operatorKeys.includes(selectedKey)) {
+        // TODO: deal with keyboard operators
+        pressOperator(selectedKey)
+    }
+
+
 }
 // TODO: add handle dot button
-// todo: add second press on dot button
-// todo: add handle negative sign
+// TODO: add second press on dot button
+// TODO: add handle negative sign
+//TODO: second push on operator when operator already defined
+//TODO : add event listener for digit keyboard key
