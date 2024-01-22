@@ -7,6 +7,7 @@ const operators = {
     equal: "=",
     sign: "+/-",
     dot: '.',
+
 }
 const formatERROR = "No way Bro !"
 const numberKeys = Array.from({ length: 10 }, (_, i) => String(i));
@@ -101,7 +102,9 @@ function pressOperator(choosedOperator) {
 }
 
 
-btnClear.addEventListener("click", (e) => { initAll(e) })
+btnClear.addEventListener("click", (e) => { initAll(e) });
+btnBack.addEventListener('click', (e) => { goBack(e) });
+
 
 
 function initAll(e) {
@@ -112,6 +115,24 @@ function initAll(e) {
     updateDisplay(displayText);
     errorMode = false;
 
+}
+function goBack() {
+    if (operator && !numberB) {
+        operator = null;
+    }
+    else {
+        if (displayText.length > 1) {
+            displayText = displayText.slice(0, -1);
+        }
+        else if (displayText.length === 1) {
+            displayText = "0";
+        }
+
+        if (numberB) {
+            numberB = displayText
+        }
+        updateDisplay(displayText)
+    }
 }
 
 
