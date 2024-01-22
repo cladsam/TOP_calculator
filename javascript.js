@@ -3,7 +3,7 @@ const operators = {
     soustract: "-",
     divide: "/",
     multiply: "*",
-    sqrt: "&radic",
+    percent: "%",
     equal: "=",
     sign: "+/-",
     dot: '.',
@@ -21,12 +21,6 @@ let errorMode = false;
 
 const btnNumbers = document.querySelectorAll(".numberBtn");
 const btnOperators = document.querySelectorAll(".operatorBtn");
-// const btnMultiply = document.querySelector("#multiply");
-// const btnDivide = document.querySelector("#divide");
-// const btnSoustract = document.querySelector("#divide");
-// const btnAdd = document.querySelector("#add");
-// const btnSqrt = document.querySelector("#sqrt")
-// const btnDot = document.querySelector("#dot")
 const displayZone = document.querySelector("#display");
 const btnBack = document.querySelector("#back")
 const btnClear = document.querySelector("#clear");
@@ -49,11 +43,17 @@ function pressOperator(choosedOperator) {
                 updateDisplay(result);
             }
             break;
-        case operators.sqrt:
+        case operators.percent:
             {
-                console.log("Let see that one a bit later");
-                break;
+                displayText = Number(displayText) / 100;
+                if (operator) {
+                    numberB = displayText;
+
+                }
+                updateDisplay(displayText);
+
             }
+            break;
         case operators.dot:
             if (operator && numberB === null) {
                 numberB = `0${operators.dot}`
@@ -155,12 +155,12 @@ function divide(a, b) {
 function multiply(a, b) {
     return a * b;
 }
-function sqrt(a) {
+function percent(a) {
     if (a < 0) {
         return formatERROR;
     }
     else {
-        return Math.sqrt(a);
+        return Math.percent(a)
     }
 }
 
@@ -179,8 +179,8 @@ function operate(a, b, operator) {
         case operators.divide:
             result = divide(a, b);
             break;
-        case operators.sqrt:
-            result = sqrt(a);
+        case operators.percent:
+            result = percent(a);
             break;
 
     }
