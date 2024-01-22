@@ -8,7 +8,7 @@ const operators = {
     sign: "+/-",
     dot: '.',
 }
-const formatERROR = "formatERROR"
+const formatERROR = "No way Bro !"
 const numberKeys = Array.from({ length: 10 }, (_, i) => String(i));
 const operatorKeys = Object.values(operators);
 
@@ -16,6 +16,7 @@ let numberA = 0;
 let numberB = null;
 let operator = null;
 let displayText = "0";
+let errorMode = false;
 // let firstNumberEntered = false;
 
 const btnNumbers = document.querySelectorAll(".numberBtn");
@@ -39,48 +40,8 @@ for (button of btnOperators) {
 }
 
 function pressOperator(choosedOperator) {
-    // console.log(e.target.textContent);
-    // let choosedOperator;
-    // choosedOperator = e.target.textContent;
-    // on saisit un opérateur après 1 nombre
-    // if (operator === null) {
-    //     operator = choosedOperator;
-    //     // firstNumberEntered = true
-    //     numberA = displayText;
+    if (errorMode) { return; }
 
-
-    // }
-    // else {
-    //     if (choosedOperator === operators.equal) {
-    //         if (numberB) {
-    //             let result = operate(Number(numberA), Number(numberB), operator);
-    //             updateDisplay(result);
-    //         }
-    //     }
-    //     else if (choosedOperator === operators.sqrt) {
-    //         console.log("Let see that one a bit later")
-    //     }
-    //     else if (choosedOperator === operators.dot) {
-    //         if (operator && numberB === null) {
-    //             updateDisplay(`0${operators.dot}`);
-    //         }
-    //         else if (!displayText.includes(operators.dot)) {
-    //             displayText = `${displayText}${operators.dot}`;
-    //             updateDisplay(displayText);
-
-    //         }
-    //     }
-    //     else {
-    //         if (numberA && numberB && operator) {
-    //             let result = operate(Number(numberA), Number(numberB), operator);
-    //             numberA = result;
-    //             updateDisplay(numberA);
-    //             numberB = null;
-    //             operator = choosedOperator;
-    //         }
-
-    //     }
-    // }
     switch (choosedOperator) {
         case operators.equal:
             if (numberB) {
@@ -89,10 +50,15 @@ function pressOperator(choosedOperator) {
             }
             break;
         case operators.sqrt:
-            console.log("Let see that one a bit later");
+            {
+                console.log("Let see that one a bit later");
+                break;
+            }
         case operators.dot:
             if (operator && numberB === null) {
-                updateDisplay(`0${operators.dot}`);
+                numberB = `0${operators.dot}`
+                displayText = numberB;
+                updateDisplay(displayText);
             }
             else if (!displayText.includes(operators.dot)) {
                 displayText = `${displayText}${operators.dot}`;
@@ -100,6 +66,18 @@ function pressOperator(choosedOperator) {
 
             }
             break;
+        case operators.sign:
+            {
+                if (displayText.includes(operators.soustract)) {
+                    displayText = displayText.replace(operators.soustract, "");
+                }
+                else {
+                    displayText = `${operators.soustract}${displayText}`;
+                };
+                updateDisplay(displayText);
+                break;
+            }
+
         default:
             {
                 if (numberA && numberB && operator) {
@@ -132,11 +110,13 @@ function initAll(e) {
     numberB = null;
     operator = null;
     updateDisplay(displayText);
+    errorMode = false;
 
 }
 
 
 function pressNumber(numberText) {
+    if (errorMode) { return; }
     if (operator && numberB === null) {
         displayText = numberText;
         numberB = displayText;
@@ -165,6 +145,7 @@ function soustract(a, b) {
 
 function divide(a, b) {
     if (b === 0) {
+        errorMode = true;
         return formatERROR;
     }
     else {
@@ -223,8 +204,3 @@ function getKeyBoardInput(e) {
 
 
 }
-// TODO: add handle dot button
-// TODO: add second press on dot button
-// TODO: add handle negative sign
-//TODO: second push on operator when operator already defined
-//TODO : add event listener for digit keyboard key
