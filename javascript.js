@@ -6,6 +6,7 @@ const operators = {
     sqrt: "&radic",
     equal: "=",
     sign: "+/-",
+    dot: '.',
 }
 const formatERROR = "formatERROR"
 const numberKeys = Array.from({ length: 10 }, (_, i) => String(i));
@@ -42,36 +43,86 @@ function pressOperator(choosedOperator) {
     // let choosedOperator;
     // choosedOperator = e.target.textContent;
     // on saisit un opérateur après 1 nombre
-    if (operator === null) {
-        operator = choosedOperator;
-        // firstNumberEntered = true
-        numberA = displayText;
+    // if (operator === null) {
+    //     operator = choosedOperator;
+    //     // firstNumberEntered = true
+    //     numberA = displayText;
 
 
-    }
-    else {
-        if (choosedOperator === operators.equal) {
+    // }
+    // else {
+    //     if (choosedOperator === operators.equal) {
+    //         if (numberB) {
+    //             let result = operate(Number(numberA), Number(numberB), operator);
+    //             updateDisplay(result);
+    //         }
+    //     }
+    //     else if (choosedOperator === operators.sqrt) {
+    //         console.log("Let see that one a bit later")
+    //     }
+    //     else if (choosedOperator === operators.dot) {
+    //         if (operator && numberB === null) {
+    //             updateDisplay(`0${operators.dot}`);
+    //         }
+    //         else if (!displayText.includes(operators.dot)) {
+    //             displayText = `${displayText}${operators.dot}`;
+    //             updateDisplay(displayText);
+
+    //         }
+    //     }
+    //     else {
+    //         if (numberA && numberB && operator) {
+    //             let result = operate(Number(numberA), Number(numberB), operator);
+    //             numberA = result;
+    //             updateDisplay(numberA);
+    //             numberB = null;
+    //             operator = choosedOperator;
+    //         }
+
+    //     }
+    // }
+    switch (choosedOperator) {
+        case operators.equal:
             if (numberB) {
                 let result = operate(Number(numberA), Number(numberB), operator);
                 updateDisplay(result);
             }
-        }
-        else if (choosedOperator === operators.sqrt) {
-            console.log("Let see that one a bit later")
-        }
-        else {
-            if (numberA && numberB && operator) {
-                let result = operate(Number(numberA), Number(numberB), operator);
-                numberA = result;
-                updateDisplay(numberA);
-                numberB = null;
-                operator = choosedOperator;
+            break;
+        case operators.sqrt:
+            console.log("Let see that one a bit later");
+        case operators.dot:
+            if (operator && numberB === null) {
+                updateDisplay(`0${operators.dot}`);
+            }
+            else if (!displayText.includes(operators.dot)) {
+                displayText = `${displayText}${operators.dot}`;
+                updateDisplay(displayText);
+
+            }
+            break;
+        default:
+            {
+                if (numberA && numberB && operator) {
+                    let result = operate(Number(numberA), Number(numberB), operator);
+                    numberA = result;
+                    updateDisplay(numberA);
+                    numberB = null;
+                    operator = choosedOperator;
+                }
+                else if (operator === null) {
+                    operator = choosedOperator;
+                    numberA = displayText;
+
+                }
+
             }
 
-        }
+
     }
 
 }
+
+
 btnClear.addEventListener("click", (e) => { initAll(e) })
 
 
@@ -150,10 +201,14 @@ function operate(a, b, operator) {
         case operators.sqrt:
             result = sqrt(a);
             break;
+
     }
     return result;
 };
 
+function addDecimalPoint() {
+
+}
 document.addEventListener("keydown", e => { getKeyBoardInput(e) });
 
 function getKeyBoardInput(e) {
